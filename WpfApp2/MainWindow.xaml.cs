@@ -1,9 +1,5 @@
-﻿using Microsoft.VisualBasic.Logging;
-using Microsoft.Win32;
-using System;
-using System.Management;
+﻿using System;
 using System.Windows;
-using System.Windows.Media;
 using System.Windows.Media.Animation;
 
 namespace WpfApp2
@@ -39,6 +35,9 @@ namespace WpfApp2
             osVerTextBlock.Text = osVersion;
             resolutionTextBlock.Text = resolution;
             hertzTextBlock.Text = hertz;
+
+            bool isDefenderEnabled = _systemInfoService.IsWindowsDefenderEnabled();
+            windowsDefenderTextBlock.Text = isDefenderEnabled ? "Enabled" : "Disabled";
         }
 
         private void StartOpacityAnimation()

@@ -80,7 +80,6 @@ namespace WpfApp2
             return hddInfo;
         }
 
-
         public string GetSddInfo()
         {
             string sddInfo = "Unknown";
@@ -94,27 +93,14 @@ namespace WpfApp2
             }
             return sddInfo;
         }
+
         public bool IsWindowsDefenderEnabled()
         {
-            try
-            {
-                using (var defenderKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender\Real-Time Protection"))
-                {
-                    if (defenderKey != null)
-                    {
-                        var value = defenderKey.GetValue("DisableRealtimeMonitoring");
-                        if (value != null && (int)value == 0)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                // Handle exceptions if needed
-            }
-            return false;
+            const string keyPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender";
+            const string valueName = "DisableAntiSpyware";
+
+            int value = (int)Registry.GetValue(keyPath, valueName, -1);
+            return value != 1;
         }
     }
 }
