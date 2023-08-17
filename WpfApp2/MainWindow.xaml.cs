@@ -20,6 +20,8 @@ namespace WpfApp2
             sddStorageTextBlock.Text = _systemInfoService.GetSddInfo();
             StartOpacityAnimation();
 
+            _systemInfoService.LogEvent += AddLog;
+
             // Get system information
             string systemName = Environment.MachineName;
             string userName = Environment.UserName;
@@ -69,6 +71,19 @@ namespace WpfApp2
                 return (int)(source.CompositionTarget.TransformToDevice.M22 * 60);
             }
             return 60; // Default value
+        }
+
+        // Property to hold log messages
+        public string LogMessages
+        {
+            get { return LogTextBlock.Text; }
+            set { LogTextBlock.Text = value; }
+        }
+
+        // Sample method to add a log message
+        public void AddLog(string message)
+        {
+            LogMessages += $"{DateTime.Now}: {message}\n";
         }
     }
 }

@@ -6,19 +6,29 @@ namespace WpfApp2
 {
     class SystemInfoService
     {
+        // Declare a delegate for the logging event
+        public delegate void LogEventHandler(string message);
+        // Declare the event using the delegate
+        public event LogEventHandler LogEvent;
 
         public string GetCpuName()
         {
-            string cpuName = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
+            try
             {
-                foreach (ManagementObject obj in searcher.Get())
+                string cpuName = "Unknown";
+                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
                 {
-                    cpuName = obj["Name"].ToString();
-                    break; // Retrieve only the first CPU
+                    foreach (ManagementObject obj in searcher.Get())
+                    {
+                        cpuName = obj["Name"].ToString();
+                        break; // Retrieve only the first CPU
+                    }
                 }
+                return cpuName;
+            } catch (Exception ex)
+            {
+                LogEvent?.Invoke($"An error occurred in SomeMethod: {ex.Message}");
             }
-            return cpuName;
         }
 
         public string GetGpuName()
