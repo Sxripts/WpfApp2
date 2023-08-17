@@ -10,9 +10,9 @@ namespace WpfApp2
         // Declare a delegate for the logging event
         public delegate void LogEventHandler(string message);
         // Declare the event using the delegate
-        public event LogEventHandler LogEvent;
+        public event LogEventHandler? LogEvent;
 
-        public string GetCpuName()
+        public string? GetCpuName()
         {
             try
             {
@@ -34,7 +34,7 @@ namespace WpfApp2
             }
         }
 
-        public static string GetGpuName()
+        public static string? GetGpuName()
         {
             string gpuName = "Unknown";
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_VideoController"))
@@ -48,7 +48,7 @@ namespace WpfApp2
             return gpuName;
         }
 
-        public static string GetTotalRamSize()
+        public static string? GetTotalRamSize()
         {
             long totalRamBytes = 0;
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_ComputerSystem"))
@@ -63,7 +63,7 @@ namespace WpfApp2
             return $"{totalRamGB:F2} GB";
         }
 
-        public static string GetMotherboardInfo()
+        public static string? GetMotherboardInfo()
         {
             string motherboardInfo = "Unknown";
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_BaseBoard"))
@@ -77,7 +77,7 @@ namespace WpfApp2
             return motherboardInfo;
         }
 
-        public static string GetHddInfo()
+        public static string? GetHddInfo()
         {
             string hddInfo = "Unknown";
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive"))
@@ -93,7 +93,7 @@ namespace WpfApp2
             return hddInfo;
         }
 
-        public static string GetSddInfo()
+        public static string? GetSddInfo()
         {
             string sddInfo = "Unknown";
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='SSD'"))
