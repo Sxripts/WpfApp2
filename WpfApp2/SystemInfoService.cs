@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Win32;
 using System.Management;
+using System.Linq;
 
 namespace WpfApp2
 {
@@ -16,27 +17,29 @@ namespace WpfApp2
             try
             {
                 string cpuName = "Unknown";
-                using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
+                using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_Processor"))
                 {
-                    foreach (ManagementObject obj in searcher.Get())
+                    foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                     {
                         cpuName = obj["Name"].ToString();
                         break; // Retrieve only the first CPU
                     }
                 }
                 return cpuName;
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 LogEvent?.Invoke($"An error occurred in SomeMethod: {ex.Message}");
+                return "Error fetching CPU name";
             }
         }
 
-        public string GetGpuName()
+        public static string GetGpuName()
         {
             string gpuName = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
+            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_VideoController"))
             {
-                foreach (ManagementObject obj in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                 {
                     gpuName = obj["Caption"].ToString();
                     break; // Retrieve only the first GPU
@@ -45,12 +48,12 @@ namespace WpfApp2
             return gpuName;
         }
 
-        public string GetTotalRamSize()
+        public static string GetTotalRamSize()
         {
             long totalRamBytes = 0;
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem"))
+            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_ComputerSystem"))
             {
-                foreach (ManagementObject obj in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                 {
                     totalRamBytes = Convert.ToInt64(obj["TotalPhysicalMemory"]);
                     break;
@@ -60,12 +63,12 @@ namespace WpfApp2
             return $"{totalRamGB:F2} GB";
         }
 
-        public string GetMotherboardInfo()
+        public static string GetMotherboardInfo()
         {
             string motherboardInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard"))
+            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_BaseBoard"))
             {
-                foreach (ManagementObject obj in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                 {
                     motherboardInfo = obj["Product"].ToString();
                     break; // Retrieve only the first motherboard
@@ -74,12 +77,12 @@ namespace WpfApp2
             return motherboardInfo;
         }
 
-        public string GetHddInfo()
+        public static string GetHddInfo()
         {
             string hddInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive"))
+            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive"))
             {
-                foreach (ManagementObject obj in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                 {
                     double sizeBytes = Convert.ToDouble(obj["Size"]);
                     double sizeGB = sizeBytes / (1024 * 1024 * 1024.0); // Convert to GB
@@ -90,12 +93,12 @@ namespace WpfApp2
             return hddInfo;
         }
 
-        public string GetSddInfo()
+        public static string GetSddInfo()
         {
             string sddInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='SSD'"))
+            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='SSD'"))
             {
-                foreach (ManagementObject obj in searcher.Get())
+                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
                 {
                     sddInfo = $"{obj["Size"]} bytes";
                     break; // Retrieve only the first SSD
@@ -104,10 +107,10 @@ namespace WpfApp2
             return sddInfo;
         }
 
-        public bool IsWindowsDefenderEnabled()
+        public static bool IsWindowsDefenderEnabled()
         {
-            const string keyPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender";
-            const string valueName = "DisableAntiSpyware";
+            const string keyPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Real-Time Protection";
+            const string valueName = "DisableRealtimeMonitoring";
 
             int value = (int)Registry.GetValue(keyPath, valueName, -1);
             return value != 1;

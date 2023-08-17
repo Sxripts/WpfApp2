@@ -7,17 +7,17 @@ namespace WpfApp2
     public partial class MainWindow : Window
     {
 
-        private readonly SystemInfoService _systemInfoService = new SystemInfoService();
+        private readonly SystemInfoService _systemInfoService = new();
 
         public MainWindow()
         {
             InitializeComponent();
             cpuNameTextBlock.Text = _systemInfoService.GetCpuName();
-            gpuNameTextBlock.Text = _systemInfoService.GetGpuName();
+            gpuNameTextBlock.Text = SystemInfoService.GetGpuName();
             ramNameTextBlock.Text = _systemInfoService.GetTotalRamSize();
-            motherboardNameTextBlock.Text = _systemInfoService.GetMotherboardInfo();
-            hddStorageTextBlock.Text = _systemInfoService.GetHddInfo();
-            sddStorageTextBlock.Text = _systemInfoService.GetSddInfo();
+            motherboardNameTextBlock.Text = SystemInfoService.GetMotherboardInfo();
+            hddStorageTextBlock.Text = SystemInfoService.GetHddInfo();
+            sddStorageTextBlock.Text = SystemInfoService.GetSddInfo();
             StartOpacityAnimation();
 
             _systemInfoService.LogEvent += AddLog;
@@ -38,13 +38,13 @@ namespace WpfApp2
             resolutionTextBlock.Text = resolution;
             hertzTextBlock.Text = hertz;
 
-            bool isDefenderEnabled = _systemInfoService.IsWindowsDefenderEnabled();
+            bool isDefenderEnabled = SystemInfoService.IsWindowsDefenderEnabled();
             windowsDefenderTextBlock.Text = isDefenderEnabled ? "Enabled" : "Disabled";
         }
 
         private void StartOpacityAnimation()
         {
-            DoubleAnimation opacityAnimation = new DoubleAnimation
+            DoubleAnimation opacityAnimation = new()
             {
                 From = 0,
                 To = 1,
@@ -56,7 +56,7 @@ namespace WpfApp2
             Storyboard.SetTargetName(opacityAnimation, "iconHome");
             Storyboard.SetTargetProperty(opacityAnimation, new PropertyPath(UIElement.OpacityProperty));
 
-            Storyboard storyboard = new Storyboard();
+            Storyboard storyboard = new();
             storyboard.Children.Add(opacityAnimation);
 
             iconHome.BeginStoryboard(storyboard);
@@ -73,17 +73,16 @@ namespace WpfApp2
             return 60; // Default value
         }
 
-        // Property to hold log messages
         public string LogMessages
         {
             get { return LogTextBlock.Text; }
             set { LogTextBlock.Text = value; }
         }
 
-        // Sample method to add a log message
         public void AddLog(string message)
         {
-            LogMessages += $"{DateTime.Now}: {message}\n";
+            string currentTime = DateTime.Now.ToString("HH:mm:ss");
+            LogMessages += $"{currentTime} {message}\n";
         }
     }
 }
