@@ -10,10 +10,18 @@ namespace WpfApp2
 {
     public partial class MainWindow : Window
     {
+
+        private readonly SystemInfoService _systemInfoService = new SystemInfoService();
+
         public MainWindow()
         {
             InitializeComponent();
-            PopulatePCHealthInfo();
+            cpuNameTextBlock.Text = _systemInfoService.GetCpuName();
+            gpuNameTextBlock.Text = _systemInfoService.GetGpuName();
+            ramNameTextBlock.Text = _systemInfoService.GetTotalRamSize();
+            motherboardNameTextBlock.Text = _systemInfoService.GetMotherboardInfo();
+            hddStorageTextBlock.Text = _systemInfoService.GetHddInfo();
+            sddStorageTextBlock.Text = _systemInfoService.GetSddInfo();
             StartOpacityAnimation();
 
             // Get system information
@@ -62,127 +70,6 @@ namespace WpfApp2
                 return (int)(source.CompositionTarget.TransformToDevice.M22 * 60);
             }
             return 60; // Default value
-        }
-
-        private void PopulatePCHealthInfo()
-        {
-            // Fetch and display PC health information
-            cpuNameTextBlock.Text = GetCpuName();
-            gpuNameTextBlock.Text = GetGpuName();
-            ramNameTextBlock.Text = GetTotalRamSize();
-            motherboardNameTextBlock.Text = GetMotherboardInfo();
-            hddStorageTextBlock.Text = GetHddInfo();
-            sddStorageTextBlock.Text = GetSddInfo();
-        }
-
-        private string GetCpuName()
-        {
-            string cpuName = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    cpuName = obj["Name"].ToString();
-                    break; // Retrieve only the first CPU
-                }
-            }
-            return cpuName;
-        }
-
-        private string GetGpuName()
-        {
-            string gpuName = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_VideoController"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    gpuName = obj["Caption"].ToString();
-                    break; // Retrieve only the first GPU
-                }
-            }
-            return gpuName;
-        }
-
-        private string GetTotalRamSize()
-        {
-            long totalRamBytes = 0;
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_ComputerSystem"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    totalRamBytes = Convert.ToInt64(obj["TotalPhysicalMemory"]);
-                    break;
-                }
-            }
-            double totalRamGB = totalRamBytes / (1024 * 1024 * 1024.0); // Convert to GB
-            return $"{totalRamGB:F2} GB";
-        }
-
-        private string GetMotherboardInfo()
-        {
-            string motherboardInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    motherboardInfo = obj["Product"].ToString();
-                    break; // Retrieve only the first motherboard
-                }
-            }
-            return motherboardInfo;
-        }
-
-        private string GetHddInfo()
-        {
-            string hddInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    double sizeBytes = Convert.ToDouble(obj["Size"]);
-                    double sizeGB = sizeBytes / (1024 * 1024 * 1024.0); // Convert to GB
-                    hddInfo = $"{sizeGB:F2} GB";
-                    break; // Retrieve only the first HDD
-                }
-            }
-            return hddInfo;
-        }
-
-
-        private string GetSddInfo()
-        {
-            string sddInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='SSD'"))
-            {
-                foreach (ManagementObject obj in searcher.Get())
-                {
-                    sddInfo = $"{obj["Size"]} bytes";
-                    break; // Retrieve only the first SSD
-                }
-            }
-            return sddInfo;
-        }
-        private bool IsWindowsDefenderEnabled()
-        {
-            try
-            {
-                using (var defenderKey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender\Real-Time Protection"))
-                {
-                    if (defenderKey != null)
-                    {
-                        var value = defenderKey.GetValue("DisableRealtimeMonitoring");
-                        if (value != null && (int)value == 0)
-                        {
-                            return true;
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                // Handle exceptions if needed
-            }
-            return false;
         }
     }
 }
