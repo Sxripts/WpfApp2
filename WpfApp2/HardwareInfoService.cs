@@ -39,7 +39,7 @@ namespace WpfApp2
             }
         }
 
-        public static string? GetGpuName()
+        public string? GetGpuName()
         {
             string gpuName = "Unknown";
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_VideoController"))
@@ -69,7 +69,7 @@ namespace WpfApp2
 
 
 
-        public static string? GetMotherboardInfo()
+        public string? GetMotherboardInfo()
         {
             ManagementObjectSearcher searcher = new("SELECT * FROM Win32_BaseBoard");
             string motherboardInfo = "Unknown";
@@ -87,7 +87,7 @@ namespace WpfApp2
             return motherboardInfo;
         }
 
-        private static string ManufacturerName(string verboseName)
+        private string ManufacturerName(string verboseName)
         {
             Dictionary<string, string> manufacturerMappings = new()
             {
@@ -112,7 +112,7 @@ namespace WpfApp2
 
 
 
-        public static string? GetHddInfo()
+        public string? GetHddInfo()
         {
             ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
             string hddInfo = "Unknown";
@@ -135,7 +135,7 @@ namespace WpfApp2
             return hddInfo;
         }
 
-        public static string? GetSddInfo()
+        public string? GetSddInfo()
         {
             ManagementObjectSearcher searcher = CreateSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid State Drive'");
             List<string> sddInfos = new();

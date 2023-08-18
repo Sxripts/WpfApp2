@@ -14,11 +14,10 @@ namespace WpfApp2
         {
             InitializeComponent();
             cpuNameTextBlock.Text = _HardwareInfoService.GetCpuName();
-            gpuNameTextBlock.Text = HardwareInfoService.GetGpuName();
+            gpuNameTextBlock.Text = _HardwareInfoService.GetGpuName();
             ramNameTextBlock.Text = _HardwareInfoService.GetTotalRamSize();
-            motherboardNameTextBlock.Text = HardwareInfoService.GetMotherboardInfo();
-            hddStorageTextBlock.Text = HardwareInfoService.GetHddInfo();
-            sddStorageTextBlock.Text = HardwareInfoService.GetSddInfo();
+            motherboardNameTextBlock.Text = _HardwareInfoService.GetMotherboardInfo();
+            hddsddStorageTextBlock.Text = _HardwareInfoService.GetHDDSDDInfo();
             StartOpacityAnimation();
 
             _systemInfoService.LogEvent += AddLog;
@@ -71,7 +70,7 @@ namespace WpfApp2
             {
                 return (int)(source.CompositionTarget.TransformToDevice.M22 * 60);
             }
-            return 60; // Default value
+            return 60;
         }
 
         public string LogMessages

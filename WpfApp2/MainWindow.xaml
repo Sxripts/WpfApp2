@@ -434,17 +434,7 @@
                                     Margin="10,0,0,36"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="bottom"
-                                    Content="HDD"
-                                    FontSize="10"
-                                    FontWeight="Bold"
-                                    Foreground="#FF454977" />
-                                <Label
-                                    Width="30"
-                                    Height="21"
-                                    Margin="10,0,0,3"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Bottom"
-                                    Content="SSD"
+                                    Content="HDD and SDD"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
@@ -491,9 +481,9 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="motherboardNameTextBlock"
-                                    Width="143"
+                                    Width="133"
                                     Height="13"
-                                    Margin="10,140,0,0"
+                                    Margin="0,140,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
@@ -503,24 +493,11 @@
                                     Text=""
                                     TextWrapping="Wrap" />
                                 <TextBlock
-                                    x:Name="hddStorageTextBlock"
-                                    Width="110"
+                                    x:Name="hddsddStorageTextBlock"
+                                    Width="143"
                                     Height="12"
-                                    Margin="10,174,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Background="{x:Null}"
-                                    FontSize="10"
-                                    FontWeight="Normal"
-                                    Foreground="#FF454977"
-                                    Text=""
-                                    TextWrapping="Wrap" />
-                                <TextBlock
-                                    x:Name="sddStorageTextBlock"
-                                    Width="118"
-                                    Height="18"
-                                    Margin="45,190,0,0"
-                                    HorizontalAlignment="Left"
+                                    Margin="0,174,0,0"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
