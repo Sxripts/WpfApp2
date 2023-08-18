@@ -68,14 +68,21 @@ namespace WpfApp2
 
         public static string? GetMotherboardInfo()
         {
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_BaseBoard");
             string motherboardInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_BaseBoard"))
+            foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
+                string manufacturer = obj.Properties["Manufacturer"]?.Value?.ToString() ?? "Unknown";
+                string product = obj.Properties["Product"]?.Value?.ToString() ?? "Unknown";
+
+                // Simplify known verbose manufacturer names
+                if (manufacturer.Equals("ASUSTeK COMPUTER INC.", StringComparison.OrdinalIgnoreCase))
                 {
-                    motherboardInfo = obj["Product"].ToString();
-                    break; // Retrieve only the first motherboard
+                    manufacturer = "Asus";
                 }
+
+                motherboardInfo = $"{manufacturer} {product}";
+                break;
             }
             return motherboardInfo;
         }
@@ -109,34 +116,37 @@ namespace WpfApp2
             List<string> sddInfos = new();
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                bool hasMediaType = obj.Properties["MediaType"] != null;
-                bool hasSpindleSpeed = obj.Properties["SpindleSpeed"] != null;
-                bool hasSize = obj.Properties["Size"] != null;
-                bool hasManufacturer = obj.Properties["Manufacturer"] != null;
-                bool hasModel = obj.Properties["Model"] != null;
-
-                object? mediaType = hasMediaType ? obj.Properties["MediaType"].Value : null;
-                object? spindleSpeed = hasSpindleSpeed ? obj.Properties["SpindleSpeed"].Value : null;
-                object? size = hasSize ? obj.Properties["Size"].Value : null;
-                object? manufacturer = hasManufacturer ? obj.Properties["Manufacturer"].Value : null;
-                object? model = hasModel ? obj.Properties["Model"].Value : null;
-
-                if (mediaType != null && mediaType.ToString() == "Solid state drive" && size != null)
+                // Print all properties for diagnostic purposes
+                foreach (PropertyData prop in obj.Properties)
                 {
-                    double sizeBytes = Convert.ToDouble(size);
-                    double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
-                    sddInfos.Add($"{manufacturer ?? "Unknown"} {model ?? "Unknown"} - {sizeGB:F2} GB");
+                    try
+                    {
+                        Console.WriteLine($"{prop.Name}: {prop.Value}");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error accessing property {prop.Name}: {ex.Message}");
+                    }
                 }
-                else if (spindleSpeed != null && Convert.ToInt32(spindleSpeed) == 0 && size != null)
+
+                // Just for testing, let's fetch only the Model property
+                object? model = null;
+                try
                 {
-                    double sizeBytes = Convert.ToDouble(size);
-                    double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
-                    sddInfos.Add($"{manufacturer ?? "Unknown"} {model ?? "Unknown"} - {sizeGB:F2} GB");
+                    model = obj.Properties["Model"]?.Value;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error accessing Model property: {ex.Message}");
+                }
+
+                if (model != null)
+                {
+                    sddInfos.Add(model.ToString());
                 }
             }
             return string.Join(", ", sddInfos);
         }
-
 
 
         public static bool IsWindowsDefenderEnabled()
