@@ -112,52 +112,35 @@ namespace WpfApp2
 
 
 
-        public string? GetHddInfo()
+        public List<string> GetAllStorageInfo()
         {
-            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
-            string hddInfo = "Unknown";
-            foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
-            {
-                // Print all properties for diagnostic purposes
-                foreach (PropertyData prop in obj.Properties)
-                {
-                    Console.WriteLine($"{prop.Name}: {prop.Value}");
-                }
+            List<string> storageInfos = new List<string>();
 
-                // Just for testing, let's fetch only the Model property
+            // Fetch HDD Info
+            ManagementObjectSearcher hddSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
+            foreach (ManagementObject obj in hddSearcher.Get().Cast<ManagementObject>())
+            {
                 object? model = obj.Properties["Model"]?.Value;
                 if (model != null)
                 {
-                    hddInfo = model.ToString();
-                    break;
+                    storageInfos.Add(model.ToString());
                 }
             }
-            return hddInfo;
-        }
 
-        public string? GetSddInfo()
-        {
-            ManagementObjectSearcher searcher = CreateSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid State Drive'");
-            List<string> sddInfos = new();
-
-            foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
+            // Fetch SSD Info
+            ManagementObjectSearcher ssdSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid State Drive'");
+            foreach (ManagementObject obj in ssdSearcher.Get().Cast<ManagementObject>())
             {
-                object? model = null;
-                try
-                {
-                    model = obj.Properties["Model"]?.Value;
-                }
-                catch (Exception ex)
-                {
-                    LogEvent?.Invoke($"Error accessing Model property: {ex.Message}");
-                }
+                object? model = obj.Properties["Model"]?.Value;
                 if (model != null)
                 {
-                    sddInfos.Add(model.ToString());
+                    storageInfos.Add(model.ToString());
                 }
             }
-            return string.Join(", ", sddInfos);
+
+            return storageInfos;
         }
+
 
     }
 }

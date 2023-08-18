@@ -16,8 +16,16 @@ namespace WpfApp2
             cpuNameTextBlock.Text = _HardwareInfoService.GetCpuName();
             gpuNameTextBlock.Text = _HardwareInfoService.GetGpuName();
             ramNameTextBlock.Text = _HardwareInfoService.GetTotalRamSize();
+            var storageInfos = _HardwareInfoService.GetAllStorageInfo();
+            if (storageInfos.Count > 0)
+            {
+                hddsddStorageTextBlock.Text = storageInfos[0]; // Display the primary storage by default
+                foreach (var info in storageInfos)
+                {
+                    storageComboBox.Items.Add(info);
+                }
+            }
             motherboardNameTextBlock.Text = _HardwareInfoService.GetMotherboardInfo();
-            hddsddStorageTextBlock.Text = _HardwareInfoService.GetHDDSDDInfo();
             StartOpacityAnimation();
 
             _systemInfoService.LogEvent += AddLog;

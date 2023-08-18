@@ -492,19 +492,22 @@
                                     Foreground="#FF454977"
                                     Text=""
                                     TextWrapping="Wrap" />
-                                <TextBlock
-                                    x:Name="hddsddStorageTextBlock"
+                                <ComboBox
+                                    x:Name="storageComboBox"
                                     Width="143"
                                     Height="12"
                                     Margin="0,174,0,0"
                                     HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
+                                    BorderBrush="{x:Null}"
                                     FontSize="10"
                                     FontWeight="Normal"
                                     Foreground="#FF454977"
-                                    Text=""
-                                    TextWrapping="Wrap" />
+                                    Text="{Binding ElementName=hddsddStorageTextBlock, Path=Text}">
+                                    <!--  The items for this ComboBox will be populated from the code-behind  -->
+                                </ComboBox>
+
 
                             </Grid>
                         </Border>
