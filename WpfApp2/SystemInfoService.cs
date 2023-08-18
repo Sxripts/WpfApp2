@@ -30,7 +30,7 @@ namespace WpfApp2
             }
             catch (Exception ex)
             {
-                LogEvent?.Invoke($"An error occurred in SomeMethod: {ex.Message}");
+                LogEvent?.Invoke($"An error occurred in GetCpuName: {ex.Message}");
                 return "Error fetching CPU name";
             }
         }
@@ -54,17 +54,16 @@ namespace WpfApp2
             ManagementObjectSearcher searcher = new("SELECT * FROM Win32_PhysicalMemory");
             long totalRamBytes = 0;
             string manufacturer = "Unknown";
-            string model = "Unknown";
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                totalRamBytes = Convert.ToInt64(obj["Capacity"]);
-                manufacturer = obj["Manufacturer"].ToString();
-                model = obj["PartNumber"].ToString(); // Keeping PartNumber as model for now
-                break;
+                totalRamBytes += Convert.ToInt64(obj["Capacity"]);
+                manufacturer = obj["Manufacturer"]?.ToString() ?? "Unknown";
             }
             double totalRamGB = totalRamBytes / (1024.0 * 1024.0 * 1024.0);
-            return $"{manufacturer} {model} - {totalRamGB:F2} GB";
+            return $"{manufacturer} {totalRamGB:F2} GB";
         }
+
+
 
         public static string? GetMotherboardInfo()
         {
@@ -76,16 +75,44 @@ namespace WpfApp2
                 string product = obj.Properties["Product"]?.Value?.ToString() ?? "Unknown";
 
                 // Simplify known verbose manufacturer names
-                if (manufacturer.Equals("ASUSTeK COMPUTER INC.", StringComparison.OrdinalIgnoreCase))
-                {
-                    manufacturer = "Asus";
-                }
+                manufacturer = ManufacturerName(manufacturer);
 
                 motherboardInfo = $"{manufacturer} {product}";
                 break;
             }
             return motherboardInfo;
         }
+
+        private static string ManufacturerName(string verboseName)
+        {
+            Dictionary<string, string> manufacturerMappings = new()
+            {
+                { "ASUSTeK COMPUTER INC.", "Asus" },
+                { "Micro-Star International", "MSI" },
+                { "Acer Inc.", "Acer" },
+                { "Hewlett-Packard", "HP" },
+                { "Gigabyte Technology Co., Ltd.", "Gigabyte" },
+                { "Dell Inc.", "Dell" },
+                { "Sony Corporation", "Sony" },
+                { "Samsung Electronics", "Samsung" },
+                { "LG Electronics", "LG" },
+                { "Intel Corporation", "Intel" },
+                { "American Megatrends Inc.", "AMI" },
+                { "Biostar Group", "Biostar" },
+                { "EVGA Corp.", "EVGA" },
+                { "Panasonic Corporation", "Panasonic" },
+            };
+
+            foreach (var mapping in manufacturerMappings)
+            {
+                if (verboseName.Equals(mapping.Key, StringComparison.OrdinalIgnoreCase))
+                {
+                    return mapping.Value;
+                }
+            }
+            return verboseName;
+        }
+
 
         public static string? GetHddInfo()
         {

@@ -394,49 +394,57 @@
                             <Grid>
                                 <!--  Labels  -->
                                 <Label
+                                    Width="35"
+                                    Margin="10,0,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Content="CPU:"
+                                    Content="CPU"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
                                 <Label
-                                    Margin="0,37,0,0"
+                                    Margin="10,40,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Content="GPU:"
+                                    Content="GPU"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
                                 <Label
-                                    Margin="0,73,0,0"
+                                    Width="32"
+                                    Height="23"
+                                    Margin="10,74,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Content="RAM:"
+                                    Content="RAM"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
                                 <Label
-                                    Margin="0,110,0,0"
+                                    Height="23"
+                                    Margin="10,117,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
-                                    Content="Mboard:"
+                                    Content="Motherboard"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
                                 <Label
-                                    Margin="0,146,0,0"
+                                    Height="21"
+                                    Margin="10,0,0,36"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Content="HDD:"
+                                    VerticalAlignment="bottom"
+                                    Content="HDD"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
                                 <Label
-                                    Margin="0,182,0,0"
+                                    Width="30"
+                                    Height="21"
+                                    Margin="10,0,0,3"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    Content="SSD:"
+                                    VerticalAlignment="Bottom"
+                                    Content="SSD"
                                     FontSize="10"
                                     FontWeight="Bold"
                                     Foreground="#FF454977" />
@@ -444,10 +452,10 @@
                                 <!--  TextBox  -->
                                 <TextBlock
                                     x:Name="cpuNameTextBlock"
-                                    Width="95"
-                                    Height="26"
-                                    Margin="68,0,0,0"
-                                    HorizontalAlignment="Left"
+                                    Width="143"
+                                    Height="16"
+                                    Margin="0,19,0,0"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -457,10 +465,10 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="gpuNameTextBlock"
-                                    Width="95"
-                                    Height="26"
-                                    Margin="68,37,0,0"
-                                    HorizontalAlignment="Left"
+                                    Width="142"
+                                    Height="17"
+                                    Margin="10,57,0,0"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -470,10 +478,10 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="ramNameTextBlock"
-                                    Width="95"
-                                    Height="26"
-                                    Margin="68,73,0,0"
-                                    HorizontalAlignment="Left"
+                                    Width="143"
+                                    Height="15"
+                                    Margin="10,102,0,0"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -483,10 +491,10 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="motherboardNameTextBlock"
-                                    Width="95"
-                                    Height="26"
-                                    Margin="68,109,0,0"
-                                    HorizontalAlignment="Left"
+                                    Width="143"
+                                    Height="13"
+                                    Margin="10,140,0,0"
+                                    HorizontalAlignment="Center"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -496,9 +504,9 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="hddStorageTextBlock"
-                                    Width="95"
-                                    Height="26"
-                                    Margin="68,146,0,0"
+                                    Width="110"
+                                    Height="12"
+                                    Margin="10,174,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
@@ -509,9 +517,9 @@
                                     TextWrapping="Wrap" />
                                 <TextBlock
                                     x:Name="sddStorageTextBlock"
-                                    Width="95"
-                                    Height="26"
-                                    Margin="68,182,0,0"
+                                    Width="118"
+                                    Height="18"
+                                    Margin="45,190,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
