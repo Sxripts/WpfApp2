@@ -2,6 +2,7 @@
 using Microsoft.Win32;
 using System.Management;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace WpfApp2
 {
@@ -50,17 +51,19 @@ namespace WpfApp2
 
         public string? GetTotalRamSize()
         {
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
             long totalRamBytes = 0;
-            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_ComputerSystem"))
+            string manufacturer = "Unknown";
+            string model = "Unknown";
+            foreach (ManagementObject obj in searcher.Get())
             {
-                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
-                {
-                    totalRamBytes = Convert.ToInt64(obj["TotalPhysicalMemory"]);
-                    break;
-                }
+                totalRamBytes = Convert.ToInt64(obj["Capacity"]);
+                manufacturer = obj["Manufacturer"].ToString();
+                model = obj["PartNumber"].ToString();
+                break;
             }
-            double totalRamGB = totalRamBytes / (1024 * 1024 * 1024.0); // Convert to GB
-            return $"{totalRamGB:F2} GB";
+            double totalRamGB = totalRamBytes / (1024 * 1024 * 1024.0);
+            return $"{manufacturer} {model} - {totalRamGB:F2} GB";
         }
 
         public static string? GetMotherboardInfo()
@@ -79,32 +82,33 @@ namespace WpfApp2
 
         public static string? GetHddInfo()
         {
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
             string hddInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive"))
+            foreach (ManagementObject obj in searcher.Get())
             {
-                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
-                {
-                    double sizeBytes = Convert.ToDouble(obj["Size"]);
-                    double sizeGB = sizeBytes / (1024 * 1024 * 1024.0); // Convert to GB
-                    hddInfo = $"{sizeGB:F2} GB";
-                    break; // Retrieve only the first HDD
-                }
+                double sizeBytes = Convert.ToDouble(obj["Size"]);
+                double sizeGB = sizeBytes / (1024 * 1024 * 1024.0);
+                string manufacturer = obj["Manufacturer"].ToString();
+                string model = obj["Model"].ToString();
+                hddInfo = $"{manufacturer} {model} - {sizeGB:F2} GB";
+                break;
             }
             return hddInfo;
         }
 
         public static string? GetSddInfo()
         {
-            string sddInfo = "Unknown";
-            using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='SSD'"))
+            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid state drive'");
+            List<string> sddInfos = new List<string>();
+            foreach (ManagementObject obj in searcher.Get())
             {
-                foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
-                {
-                    sddInfo = $"{obj["Size"]} bytes";
-                    break; // Retrieve only the first SSD
-                }
+                double sizeBytes = Convert.ToDouble(obj["Size"]);
+                double sizeGB = sizeBytes / (1024 * 1024 * 1024.0);
+                string manufacturer = obj["Manufacturer"].ToString();
+                string model = obj["Model"].ToString();
+                sddInfos.Add($"{manufacturer} {model} - {sizeGB:F2} GB");
             }
-            return sddInfo;
+            return string.Join(", ", sddInfos);
         }
 
         public static bool IsWindowsDefenderEnabled()
