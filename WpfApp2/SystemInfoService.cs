@@ -86,18 +86,23 @@ namespace WpfApp2
             string hddInfo = "Unknown";
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                if (obj.Properties["SpindleSpeed"]?.Value != null && Convert.ToInt32(obj.Properties["SpindleSpeed"].Value) > 0)
+                // Print all properties for diagnostic purposes
+                foreach (PropertyData prop in obj.Properties)
                 {
-                    double sizeBytes = obj.Properties["Size"]?.Value != null ? Convert.ToDouble(obj.Properties["Size"].Value) : 0;
-                    double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
-                    string manufacturer = obj.Properties["Manufacturer"]?.Value != null ? obj.Properties["Manufacturer"].Value.ToString() : "Unknown";
-                    string model = obj.Properties["Model"]?.Value != null ? obj.Properties["Model"].Value.ToString() : "Unknown";
-                    hddInfo = $"{manufacturer} {model} - {sizeGB:F2} GB";
+                    Console.WriteLine($"{prop.Name}: {prop.Value}");
+                }
+
+                // Just for testing, let's fetch only the Model property
+                object? model = obj.Properties["Model"]?.Value;
+                if (model != null)
+                {
+                    hddInfo = model.ToString();
                     break;
                 }
             }
             return hddInfo;
         }
+
 
 
         public static string? GetSddInfo()
