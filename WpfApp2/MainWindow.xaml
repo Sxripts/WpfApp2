@@ -495,10 +495,13 @@
                                 <ComboBox
                                     x:Name="storageComboBox"
                                     Width="135"
-                                    Height="15"
-                                    Margin="10,0,0,21"
+                                    Height="20"
+                                    Margin="10,0,0,16"
                                     HorizontalAlignment="Left"
-                                    VerticalAlignment="Bottom">
+                                    VerticalAlignment="Bottom"
+                                    FontSize="10"
+                                    FontWeight="Normal"
+                                    Foreground="#FF454977">
                                     <ComboBox.Resources>
                                         <Style TargetType="ComboBox">
                                             <Setter Property="Background" Value="Transparent" />
@@ -522,8 +525,6 @@
                                         </Style>
                                     </ComboBox.Resources>
                                 </ComboBox>
-
-
                             </Grid>
                         </Border>
                     </Grid>

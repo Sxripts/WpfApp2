@@ -122,14 +122,17 @@ namespace WpfApp2
             foreach (ManagementObject osObj in osSearcher.Get().Cast<ManagementObject>())
             {
                 string primaryDriveLetter = osObj["SystemDrive"].ToString();
-                ManagementObjectSearcher logicalDriveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_LogicalDisk WHERE DeviceID='{primaryDriveLetter}'");
+                ManagementObjectSearcher logicalDriveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_LogicalDiskToPartition");
                 foreach (ManagementObject logicalDriveObj in logicalDriveSearcher.Get().Cast<ManagementObject>())
                 {
-                    string pnpDeviceID = logicalDriveObj["PNPDeviceID"].ToString();
-                    ManagementObjectSearcher driveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_DiskDrive WHERE PNPDeviceID='{pnpDeviceID}'");
-                    foreach (ManagementObject driveObj in driveSearcher.Get().Cast<ManagementObject>())
+                    if (logicalDriveObj["Dependent"].ToString().Contains(primaryDriveLetter))
                     {
-                        primaryDiskName = driveObj["Model"].ToString();
+                        string deviceID = logicalDriveObj["Antecedent"].ToString().Split('=')[1].Replace("\"", "").Replace("\\\\", "\\");
+                        ManagementObjectSearcher driveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_DiskDrive WHERE DeviceID='{deviceID}'");
+                        foreach (ManagementObject driveObj in driveSearcher.Get().Cast<ManagementObject>())
+                        {
+                            primaryDiskName = driveObj["Model"].ToString();
+                        }
                     }
                 }
             }
@@ -154,8 +157,6 @@ namespace WpfApp2
 
             return storageInfos;
         }
-
-
 
     }
 }
