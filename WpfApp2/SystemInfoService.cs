@@ -51,7 +51,7 @@ namespace WpfApp2
 
         public string? GetTotalRamSize()
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_PhysicalMemory");
             long totalRamBytes = 0;
             string manufacturer = "Unknown";
             string model = "Unknown";
@@ -82,7 +82,7 @@ namespace WpfApp2
 
         public static string? GetHddInfo()
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
             string hddInfo = "Unknown";
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
@@ -98,8 +98,8 @@ namespace WpfApp2
 
         public static string? GetSddInfo()
         {
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid state drive'");
-            List<string> sddInfos = new List<string>();
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid state drive'");
+            List<string> sddInfos = new();
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
                 double sizeBytes = Convert.ToDouble(obj["Size"]);
