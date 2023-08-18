@@ -103,22 +103,35 @@ namespace WpfApp2
             return hddInfo;
         }
 
-
-
         public static string? GetSddInfo()
         {
-            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE (MediaType='Solid state drive' OR SpindleSpeed = 0)");
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive");
             List<string> sddInfos = new();
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                double sizeBytes = Convert.ToDouble(obj["Size"]);
-                double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
-                string manufacturer = obj["Manufacturer"].ToString();
-                string model = obj["Model"].ToString();
-                sddInfos.Add($"{manufacturer} {model} - {sizeGB:F2} GB");
+                object? mediaType = obj.Properties["MediaType"]?.Value;
+                object? spindleSpeed = obj.Properties["SpindleSpeed"]?.Value;
+
+                if (mediaType != null && mediaType.ToString() == "Solid state drive")
+                {
+                    double sizeBytes = obj.Properties["Size"]?.Value != null ? Convert.ToDouble(obj.Properties["Size"].Value) : 0;
+                    double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
+                    string manufacturer = obj.Properties["Manufacturer"]?.Value != null ? obj.Properties["Manufacturer"].Value.ToString() : "Unknown";
+                    string model = obj.Properties["Model"]?.Value != null ? obj.Properties["Model"].Value.ToString() : "Unknown";
+                    sddInfos.Add($"{manufacturer} {model} - {sizeGB:F2} GB");
+                }
+                else if (spindleSpeed != null && Convert.ToInt32(spindleSpeed) == 0)
+                {
+                    double sizeBytes = obj.Properties["Size"]?.Value != null ? Convert.ToDouble(obj.Properties["Size"].Value) : 0;
+                    double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
+                    string manufacturer = obj.Properties["Manufacturer"]?.Value != null ? obj.Properties["Manufacturer"].Value.ToString() : "Unknown";
+                    string model = obj.Properties["Model"]?.Value != null ? obj.Properties["Model"].Value.ToString() : "Unknown";
+                    sddInfos.Add($"{manufacturer} {model} - {sizeGB:F2} GB");
+                }
             }
             return string.Join(", ", sddInfos);
         }
+
 
         public static bool IsWindowsDefenderEnabled()
         {
