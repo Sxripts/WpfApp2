@@ -122,10 +122,15 @@ namespace WpfApp2
             foreach (ManagementObject osObj in osSearcher.Get().Cast<ManagementObject>())
             {
                 string primaryDriveLetter = osObj["SystemDrive"].ToString();
-                ManagementObjectSearcher driveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_DiskDrive WHERE DeviceID IN (ASSOCIATORS OF {{Win32_LogicalDisk.DeviceID='{primaryDriveLetter}'}})");
-                foreach (ManagementObject driveObj in driveSearcher.Get().Cast<ManagementObject>())
+                ManagementObjectSearcher logicalDriveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_LogicalDisk WHERE DeviceID='{primaryDriveLetter}'");
+                foreach (ManagementObject logicalDriveObj in logicalDriveSearcher.Get().Cast<ManagementObject>())
                 {
-                    primaryDiskName = driveObj["Model"].ToString();
+                    string pnpDeviceID = logicalDriveObj["PNPDeviceID"].ToString();
+                    ManagementObjectSearcher driveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_DiskDrive WHERE PNPDeviceID='{pnpDeviceID}'");
+                    foreach (ManagementObject driveObj in driveSearcher.Get().Cast<ManagementObject>())
+                    {
+                        primaryDiskName = driveObj["Model"].ToString();
+                    }
                 }
             }
 
@@ -149,6 +154,8 @@ namespace WpfApp2
 
             return storageInfos;
         }
+
+
 
     }
 }
