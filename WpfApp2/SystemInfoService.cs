@@ -132,7 +132,6 @@ namespace WpfApp2
         }
 
 
-
         public static bool IsWindowsDefenderEnabled()
         {
             const string keyPath = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows Defender\Real-Time Protection";
