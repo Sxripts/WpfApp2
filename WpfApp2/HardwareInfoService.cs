@@ -149,7 +149,7 @@ namespace WpfApp2
                 }
                 catch (Exception ex)
                 {
-                    Console.WriteLine($"Error accessing Model property: {ex.Message}");
+                    LogEvent?.Invoke($"Error accessing Model property: {ex.Message}");
                 }
                 if (model != null)
                 {

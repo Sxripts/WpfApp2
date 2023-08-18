@@ -22,6 +22,7 @@ namespace WpfApp2
             StartOpacityAnimation();
 
             _systemInfoService.LogEvent += AddLog;
+            _HardwareInfoService.LogEvent += AddLog;
 
             // Get system information
             string systemName = Environment.MachineName;
@@ -75,14 +76,14 @@ namespace WpfApp2
 
         public string LogMessages
         {
-            get { return LogTextBlock.Text; }
-            set { LogTextBlock.Text = value; }
+            get { return LoggingConsole.Text; }
+            set { LoggingConsole.Text = value; }
         }
 
         public void AddLog(string message)
         {
             string currentTime = DateTime.Now.ToString("HH:mm:ss");
-            LogMessages += $"{currentTime} {message}\n";
+            LoggingConsole.Text += $"{currentTime} {message}\n";
         }
     }
 }
