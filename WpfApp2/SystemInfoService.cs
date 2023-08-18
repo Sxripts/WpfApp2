@@ -82,19 +82,23 @@ namespace WpfApp2
 
         public static string? GetHddInfo()
         {
-            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media' AND SpindleSpeed > 0");
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
             string hddInfo = "Unknown";
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                double sizeBytes = Convert.ToDouble(obj["Size"]);
-                double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
-                string manufacturer = obj["Manufacturer"].ToString();
-                string model = obj["Model"].ToString();
-                hddInfo = $"{manufacturer} {model} - {sizeGB:F2} GB";
-                break;
+                if (obj.Properties["SpindleSpeed"]?.Value != null && Convert.ToInt32(obj.Properties["SpindleSpeed"].Value) > 0)
+                {
+                    double sizeBytes = obj.Properties["Size"]?.Value != null ? Convert.ToDouble(obj.Properties["Size"].Value) : 0;
+                    double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
+                    string manufacturer = obj.Properties["Manufacturer"]?.Value != null ? obj.Properties["Manufacturer"].Value.ToString() : "Unknown";
+                    string model = obj.Properties["Model"]?.Value != null ? obj.Properties["Model"].Value.ToString() : "Unknown";
+                    hddInfo = $"{manufacturer} {model} - {sizeGB:F2} GB";
+                    break;
+                }
             }
             return hddInfo;
         }
+
 
         public static string? GetSddInfo()
         {
