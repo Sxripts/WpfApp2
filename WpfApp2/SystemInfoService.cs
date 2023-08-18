@@ -48,7 +48,7 @@ namespace WpfApp2
             return gpuName;
         }
 
-        public static string? GetTotalRamSize()
+        public string? GetTotalRamSize()
         {
             long totalRamBytes = 0;
             using (ManagementObjectSearcher searcher = new("SELECT * FROM Win32_ComputerSystem"))
