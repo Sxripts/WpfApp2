@@ -371,7 +371,7 @@
                             <Grid>
                                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                                     <TextBlock
-                                        x:Name="LogTextBlock"
+                                        x:Name="LoggingConsole"
                                         Padding="10"
                                         Foreground="White"
                                         TextWrapping="Wrap" />

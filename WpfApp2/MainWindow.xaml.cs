@@ -8,16 +8,17 @@ namespace WpfApp2
     {
 
         private readonly SystemInfoService _systemInfoService = new();
+        private readonly HardwareInfoService _HardwareInfoService = new();
 
         public MainWindow()
         {
             InitializeComponent();
-            cpuNameTextBlock.Text = _systemInfoService.GetCpuName();
-            gpuNameTextBlock.Text = SystemInfoService.GetGpuName();
-            ramNameTextBlock.Text = _systemInfoService.GetTotalRamSize();
-            motherboardNameTextBlock.Text = SystemInfoService.GetMotherboardInfo();
-            hddStorageTextBlock.Text = SystemInfoService.GetHddInfo();
-            sddStorageTextBlock.Text = SystemInfoService.GetSddInfo();
+            cpuNameTextBlock.Text = _HardwareInfoService.GetCpuName();
+            gpuNameTextBlock.Text = HardwareInfoService.GetGpuName();
+            ramNameTextBlock.Text = _HardwareInfoService.GetTotalRamSize();
+            motherboardNameTextBlock.Text = HardwareInfoService.GetMotherboardInfo();
+            hddStorageTextBlock.Text = HardwareInfoService.GetHddInfo();
+            sddStorageTextBlock.Text = HardwareInfoService.GetSddInfo();
             StartOpacityAnimation();
 
             _systemInfoService.LogEvent += AddLog;
@@ -28,9 +29,8 @@ namespace WpfApp2
             string osName = Environment.OSVersion.VersionString;
             string osVersion = Environment.OSVersion.Version.ToString();
             string resolution = SystemParameters.PrimaryScreenWidth + "x" + SystemParameters.PrimaryScreenHeight;
-            string hertz = GetPrimaryScreenRefreshRate() + " Hz"; // Use custom method
+            string hertz = GetPrimaryScreenRefreshRate() + " Hz";
 
-            // Update TextBlocks with system information
             systemNameTextBlock.Text = systemName;
             userTextBlock.Text = userName;
             osTextBlock.Text = osName;
