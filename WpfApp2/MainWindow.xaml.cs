@@ -19,7 +19,7 @@ namespace WpfApp2
             var storageInfos = _HardwareInfoService.GetAllStorageInfo();
             if (storageInfos.Count > 0)
             {
-                hddsddStorageTextBlock.Text = storageInfos[0]; // Display the primary storage by default
+                storageComboBox.Text = storageInfos[0];
                 foreach (var info in storageInfos)
                 {
                     storageComboBox.Items.Add(info);

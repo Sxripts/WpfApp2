@@ -444,8 +444,8 @@
                                     x:Name="cpuNameTextBlock"
                                     Width="143"
                                     Height="16"
-                                    Margin="0,19,0,0"
-                                    HorizontalAlignment="Center"
+                                    Margin="10,19,0,0"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -458,7 +458,7 @@
                                     Width="142"
                                     Height="17"
                                     Margin="10,57,0,0"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -471,7 +471,7 @@
                                     Width="143"
                                     Height="15"
                                     Margin="10,102,0,0"
-                                    HorizontalAlignment="Center"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -483,8 +483,8 @@
                                     x:Name="motherboardNameTextBlock"
                                     Width="133"
                                     Height="13"
-                                    Margin="0,140,0,0"
-                                    HorizontalAlignment="Center"
+                                    Margin="10,140,0,0"
+                                    HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     Background="{x:Null}"
                                     FontSize="10"
@@ -494,18 +494,33 @@
                                     TextWrapping="Wrap" />
                                 <ComboBox
                                     x:Name="storageComboBox"
-                                    Width="143"
-                                    Height="12"
-                                    Margin="0,174,0,0"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Top"
-                                    Background="{x:Null}"
-                                    BorderBrush="{x:Null}"
-                                    FontSize="10"
-                                    FontWeight="Normal"
-                                    Foreground="#FF454977"
-                                    Text="{Binding ElementName=hddsddStorageTextBlock, Path=Text}">
-                                    <!--  The items for this ComboBox will be populated from the code-behind  -->
+                                    Width="135"
+                                    Height="15"
+                                    Margin="10,0,0,21"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Bottom">
+                                    <ComboBox.Resources>
+                                        <Style TargetType="ComboBox">
+                                            <Setter Property="Background" Value="Transparent" />
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                        </Style>
+                                        <Style TargetType="ToggleButton">
+                                            <Setter Property="Template">
+                                                <Setter.Value>
+                                                    <ControlTemplate TargetType="ToggleButton">
+                                                        <Border Background="Transparent">
+                                                            <Path
+                                                                x:Name="Arrow"
+                                                                HorizontalAlignment="Right"
+                                                                VerticalAlignment="Center"
+                                                                Data="M 0 0 L 4 4 L 8 0 Z"
+                                                                Fill="Black" />
+                                                        </Border>
+                                                    </ControlTemplate>
+                                                </Setter.Value>
+                                            </Setter>
+                                        </Style>
+                                    </ComboBox.Resources>
                                 </ComboBox>
 
 

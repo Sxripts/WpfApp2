@@ -115,32 +115,40 @@ namespace WpfApp2
         public List<string> GetAllStorageInfo()
         {
             List<string> storageInfos = new List<string>();
+            string primaryDiskName = "";
 
-            // Fetch HDD Info
-            ManagementObjectSearcher hddSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
-            foreach (ManagementObject obj in hddSearcher.Get().Cast<ManagementObject>())
+            // Fetch the primary disk (where Windows is installed)
+            ManagementObjectSearcher osSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_OperatingSystem");
+            foreach (ManagementObject osObj in osSearcher.Get().Cast<ManagementObject>())
             {
-                object? model = obj.Properties["Model"]?.Value;
-                if (model != null)
+                string primaryDriveLetter = osObj["SystemDrive"].ToString();
+                ManagementObjectSearcher driveSearcher = new ManagementObjectSearcher($"SELECT * FROM Win32_DiskDrive WHERE DeviceID IN (ASSOCIATORS OF {{Win32_LogicalDisk.DeviceID='{primaryDriveLetter}'}})");
+                foreach (ManagementObject driveObj in driveSearcher.Get().Cast<ManagementObject>())
                 {
-                    storageInfos.Add(model.ToString());
+                    primaryDiskName = driveObj["Model"].ToString();
                 }
             }
 
-            // Fetch SSD Info
-            ManagementObjectSearcher ssdSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid State Drive'");
-            foreach (ManagementObject obj in ssdSearcher.Get().Cast<ManagementObject>())
+            // Fetch HDD and SSD Info
+            ManagementObjectSearcher storageSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media' OR MediaType='Solid State Drive'");
+            foreach (ManagementObject obj in storageSearcher.Get().Cast<ManagementObject>())
             {
                 object? model = obj.Properties["Model"]?.Value;
                 if (model != null)
                 {
-                    storageInfos.Add(model.ToString());
+                    if (model.ToString() == primaryDiskName)
+                    {
+                        storageInfos.Insert(0, model.ToString()); // Add primary disk to the beginning of the list
+                    }
+                    else
+                    {
+                        storageInfos.Add(model.ToString());
+                    }
                 }
             }
 
             return storageInfos;
         }
-
 
     }
 }
