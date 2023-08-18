@@ -59,10 +59,10 @@ namespace WpfApp2
             {
                 totalRamBytes = Convert.ToInt64(obj["Capacity"]);
                 manufacturer = obj["Manufacturer"].ToString();
-                model = obj["PartNumber"].ToString();
+                model = obj["PartNumber"].ToString(); // Keeping PartNumber as model for now
                 break;
             }
-            double totalRamGB = totalRamBytes / (1024 * 1024 * 1024.0);
+            double totalRamGB = totalRamBytes / (1024.0 * 1024.0 * 1024.0);
             return $"{manufacturer} {model} - {totalRamGB:F2} GB";
         }
 
@@ -82,12 +82,12 @@ namespace WpfApp2
 
         public static string? GetHddInfo()
         {
-            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media'");
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Fixed hard disk media' AND SpindleSpeed > 0");
             string hddInfo = "Unknown";
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
                 double sizeBytes = Convert.ToDouble(obj["Size"]);
-                double sizeGB = sizeBytes / (1024 * 1024 * 1024.0);
+                double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
                 string manufacturer = obj["Manufacturer"].ToString();
                 string model = obj["Model"].ToString();
                 hddInfo = $"{manufacturer} {model} - {sizeGB:F2} GB";
@@ -98,12 +98,12 @@ namespace WpfApp2
 
         public static string? GetSddInfo()
         {
-            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE MediaType='Solid state drive'");
+            ManagementObjectSearcher searcher = new("SELECT * FROM Win32_DiskDrive WHERE (MediaType='Solid state drive' OR SpindleSpeed = 0)");
             List<string> sddInfos = new();
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
                 double sizeBytes = Convert.ToDouble(obj["Size"]);
-                double sizeGB = sizeBytes / (1024 * 1024 * 1024.0);
+                double sizeGB = sizeBytes / (1024.0 * 1024.0 * 1024.0);
                 string manufacturer = obj["Manufacturer"].ToString();
                 string model = obj["Model"].ToString();
                 sddInfos.Add($"{manufacturer} {model} - {sizeGB:F2} GB");
