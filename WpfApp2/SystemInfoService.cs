@@ -109,11 +109,17 @@ namespace WpfApp2
             List<string> sddInfos = new();
             foreach (ManagementObject obj in searcher.Get().Cast<ManagementObject>())
             {
-                object? mediaType = obj.Properties["MediaType"]?.Value;
-                object? spindleSpeed = obj.Properties["SpindleSpeed"]?.Value;
-                object? size = obj.Properties["Size"]?.Value;
-                object? manufacturer = obj.Properties["Manufacturer"]?.Value;
-                object? model = obj.Properties["Model"]?.Value;
+                bool hasMediaType = obj.Properties["MediaType"] != null;
+                bool hasSpindleSpeed = obj.Properties["SpindleSpeed"] != null;
+                bool hasSize = obj.Properties["Size"] != null;
+                bool hasManufacturer = obj.Properties["Manufacturer"] != null;
+                bool hasModel = obj.Properties["Model"] != null;
+
+                object? mediaType = hasMediaType ? obj.Properties["MediaType"].Value : null;
+                object? spindleSpeed = hasSpindleSpeed ? obj.Properties["SpindleSpeed"].Value : null;
+                object? size = hasSize ? obj.Properties["Size"].Value : null;
+                object? manufacturer = hasManufacturer ? obj.Properties["Manufacturer"].Value : null;
+                object? model = hasModel ? obj.Properties["Model"].Value : null;
 
                 if (mediaType != null && mediaType.ToString() == "Solid state drive" && size != null)
                 {
@@ -130,6 +136,7 @@ namespace WpfApp2
             }
             return string.Join(", ", sddInfos);
         }
+
 
 
         public static bool IsWindowsDefenderEnabled()
