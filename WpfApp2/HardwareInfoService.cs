@@ -7,9 +7,7 @@ namespace WpfApp2
 {
     internal class HardwareInfoService
     {
-        // Declare a delegate for the logging event
         public delegate void LogEventHandler(string message);
-        // Declare the event using the delegate
         public event LogEventHandler? LogEvent;
 
         private static ManagementObjectSearcher CreateSearcher(string wmiQuery)
@@ -88,6 +86,7 @@ namespace WpfApp2
         }
 
         private string ManufacturerName(string verboseName)
+
         {
             Dictionary<string, string> manufacturerMappings = new()
             {
